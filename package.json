@@ -1,9 +1,9 @@
 {
-  "name": "dms",
+  "name": "erp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dms": "next dev",
+    "erp": "next dev",
     "components": "storybook dev -p 3001",
     "analyze": "cross-env ANALYZE=true npm run build",
     "build": "next build",
