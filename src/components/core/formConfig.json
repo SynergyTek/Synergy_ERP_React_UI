@@ -1,0 +1,45 @@
+{
+  "components": [
+    {
+      "type": "input",
+      "name": "username",
+      "label": "Username",
+      "placeholder": "scorpius",
+      "description": "This is your public display name.",
+      "validation": {
+        "minLength": 2,
+        "maxLength": 20,
+        "regex": "^[a-zA-Z0-9_]+$",
+        "message": {
+          "minLength": "Username must be at least 2 characters.",
+          "maxLength": "Username must be at most 20 characters.",
+          "regex": "Username can only contain letters, numbers, and underscores."
+        }
+      }
+    },
+    {
+      "type": "input",
+      "name": "email",
+      "label": "Email",
+      "placeholder": "example@example.com",
+      "validation": {
+        "email": true,
+        "message": "Please enter a valid email address."
+      }
+    },
+    {
+      "type": "number",
+      "name": "age",
+      "label": "Age",
+      "placeholder": "25",
+      "validation": {
+        "min": 18,
+        "max": 100,
+        "message": {
+          "min": "Age must be at least 18.",
+          "max": "Age must be at most 100."
+        }
+      }
+    }
+  ]
+}

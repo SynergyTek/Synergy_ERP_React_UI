@@ -1,0 +1,8 @@
+node_modules
+.idea
+.next
+storybook-static
+
+.env.local
+.env
+certificates

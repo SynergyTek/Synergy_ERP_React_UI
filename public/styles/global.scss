@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+html,
+body {
+  min-height: 100vh;
+  font-family: Inter,
+  -apple-system,
+  BlinkMacSystemFont,
+  Segoe UI,
+  Roboto,
+  Oxygen,
+  Ubuntu,
+  Cantarell,
+  Fira Sans,
+  Droid Sans,
+  Helvetica Neue,
+  sans-serif;
+  @apply p-0 m-0 bg-white dark:bg-secondary-950;
+}
+
+
+input {
+  @apply focus:outline-none
+}
+
+a {
+  @apply text-inherit decoration-0
+}
+
+* {
+  @apply box-border
+}
+
+img {
+  @apply max-w-full h-auto
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply text-cyan-950
+}
+
+svg {
+  background: transparent !important;
+}
+
+.onDesktop {
+  @apply hidden md:block
+}
+
+.onMoblie {
+  @apply block md:hidden
+}
+
+select {
+  -webkit-appearance: none; /* For Chrome */
+  -moz-appearance: none; /* For Firefox */
+  appearance: none; /* For other browsers */
+}
+
+.custom-scroll {
+  -webkit-appearance: none; /* For Chrome */
+  -moz-appearance: none; /* For Firefox */
+  appearance: none; /* For other browsers */
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #888 #e0e0e0; /* For Firefox */
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+.custom-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}

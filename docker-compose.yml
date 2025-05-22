@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  dms-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dms-frontend
+    ports:
+      - "6780:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:6780
+      - NEXT_PUBLIC_DMS_API_BASE_URL=http://localhost:6780/dmsapi
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - dms-network
+
+
+volumes:
+  dms-data:
+    name: dms-data
+
+networks:
+  dms-network:
+    name: dms-network
+    driver: bridge

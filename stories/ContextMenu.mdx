@@ -1,0 +1,66 @@
+import {Text, Toaster} from "~";import {Meta} from '@storybook/blocks';
+import {toast} from "sonner";
+import {ContextMenuTrigger} from '~/core/ContextMenu';
+import {Controls} from "@storybook/blocks"
+import Separator from "~/core/Separator";
+
+<Toaster richcolors />
+<Meta title="Core/Context Menu"/>
+<div className={"sb-unstyled"}>
+	
+	<Text size={"2xl"}
+	      className={"mb-4"}>Context Menu</Text>
+	<Separator />
+	<Text size={"sm"}>Try right clicking on the area below</Text>
+</div>
+#
+#
+#
+
+<ContextMenuTrigger options={[
+	{label: "This is an option"},
+	{label: "This is another option"},
+	{
+		label: "This is a toast", onClick: () => {
+			toast("This is a toast")
+		}
+	},
+]}>
+	<div className={"h-32 w-56 outline-dotted rounded flex items-center justify-center"}>
+		
+		<Text color={"secondary"}>Right click here</Text>
+	</div>
+</ContextMenuTrigger>
+
+#
+#
+#
+#
+#
+#
+<div className={"sb-unstyled"}>
+	
+	
+	<Text size={"sm"}>Behaviour like this can be obtained easily by the wrapping existing object around the ContextMenuTrigger object</Text>
+</div>
+
+```jsx
+import {ContextMenuTrigger} from "~/core/ContextMenu"; 
+import {toast} from "sonner";
+
+const options = [
+	{label: "This is an option"},
+	{label: "This is another option"},
+	{label: "This is a toast", onClick: () => {toast("This is a toast")}},
+];
+
+<ContextMenuTrigger options={options}>
+
+	<div className={"h-32 w-56 outline-dotted rounded flex items-center justify-center"}>
+		<Text color={"secondary"}>Right click here</Text>
+	</div>
+
+</ContextMenuTrigger>
+```
+
+

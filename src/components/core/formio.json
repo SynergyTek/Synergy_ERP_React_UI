@@ -1,0 +1,330 @@
+{
+  "synergyTableMapId": "",
+  "components": [
+    {
+      "label": "Username",
+      "description": "This is your public display name.",
+      "showInBusinessLogic": false,
+      "tableView": true,
+      "dontCreateTableColumn": false,
+      "validate": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 20
+      },
+      "key": "Username",
+      "type": "textfield",
+      "enableLocalization": false,
+      "enableLanguageValidation": false,
+      "input": true,
+      "columnMetadataId": "6b17a3e7-1fe0-4214-8083-4872d7195652"
+    },
+    {
+      "label": "Email",
+      "showInBusinessLogic": false,
+      "tableView": true,
+      "dontCreateTableColumn": false,
+      "validate": {
+        "required": true
+      },
+      "key": "Email",
+      "type": "email",
+      "enableLocalization": false,
+      "enableLanguageValidation": false,
+      "input": true,
+      "columnMetadataId": "22048062-1fe8-4b00-ace7-17cfccec2dc6"
+    },
+    {
+      "label": "Age",
+      "showInBusinessLogic": false,
+      "mask": false,
+      "spellcheck": true,
+      "tableView": false,
+      "delimiter": false,
+      "requireDecimal": false,
+      "inputFormat": "plain",
+      "dontCreateTableColumn": false,
+      "validate": {
+        "min": 18,
+        "max": 60
+      },
+      "key": "Age",
+      "type": "number",
+      "enableLocalization": false,
+      "enableLanguageValidation": false,
+      "input": true,
+      "columnMetadataId": "9a92b14b-b657-48ce-b825-55c9feef93e1"
+    },
+    {
+      "label": "Gender",
+      "optionsLabelPosition": "right",
+      "inline": false,
+      "tableView": false,
+      "values": [
+        {
+          "label": "Male",
+          "value": "male",
+          "shortcut": ""
+        },
+        {
+          "label": "Female",
+          "value": "female",
+          "shortcut": ""
+        }
+      ],
+      "showInBusinessLogic": false,
+      "dontCreateTableColumn": false,
+      "validate": {
+        "required": true,
+        "onlyAvailableItems": false
+      },
+      "key": "gender",
+      "type": "radio",
+      "input": true,
+      "columnMetadataId": "48225bd3-0f86-48cc-997d-1f6c83c77c98"
+    },
+    {
+      "label": "Date of birth",
+      "format": "dd MMM yyyy",
+      "tableView": false,
+      "enableMinDateInput": false,
+      "datePicker": {
+        "disableWeekends": false,
+        "disableWeekdays": false
+      },
+      "enableMaxDateInput": false,
+      "enableTime": false,
+      "showInBusinessLogic": false,
+      "dontCreateTableColumn": false,
+      "validate": {
+        "required": true
+      },
+      "key": "DOB",
+      "type": "datetime",
+      "input": true,
+      "widget": {
+        "type": "calendar",
+        "displayInTimezone": "viewer",
+        "locale": "en",
+        "useLocaleSettings": false,
+        "allowInput": true,
+        "mode": "single",
+        "enableTime": false,
+        "noCalendar": false,
+        "format": "dd MMM yyyy",
+        "hourIncrement": 1,
+        "minuteIncrement": 1,
+        "time_24hr": false,
+        "minDate": null,
+        "disableWeekends": false,
+        "disableWeekdays": false,
+        "maxDate": null
+      },
+      "columnMetadataId": "76160c6e-b3f8-44a2-98a1-410a73a740d5"
+    },
+    {
+      "label": "LOV",
+      "widget": "choicesjs",
+      "tableView": true,
+      "loadTable": "LOV",
+      "parameterCode": "TASK_PRIORITY",
+      "dataSrc": "url",
+      "data": {
+        "values": [
+          {
+            "label": "",
+            "value": ""
+          }
+        ],
+        "url": "cms/query/GetLOVIdNameList?lovType=TASK_PRIORITY",
+        "headers": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ]
+      },
+      "valueProperty": "Id",
+      "idPath": "Id",
+      "template": "<span>{{ item.Name }}</span>",
+      "selectThreshold": 0.3,
+      "showInBusinessLogic": false,
+      "disableForeignKey": false,
+      "dontCreateTableColumn": false,
+      "validate": {
+        "required": true,
+        "onlyAvailableItems": false
+      },
+      "key": "LOV",
+      "type": "select",
+      "indexeddb": {
+        "filter": {}
+      },
+      "allTable": "public.LOV",
+      "mapId": "Id",
+      "mapValue": "Name",
+      "input": true,
+      "isDependantComponent": false,
+      "disableLimit": false,
+      "columnMetadataId": "e4ceba73-e773-434c-9e6d-1acc5c6ff024"
+    },
+    {
+      "label": "Enum",
+      "widget": "choicesjs",
+      "tableView": true,
+      "loadTable": "ENUM",
+      "parameterCode": "PerformanceDocumentStatusEnum",
+      "dataSrc": "url",
+      "data": {
+        "values": [
+          {
+            "label": "",
+            "value": ""
+          }
+        ],
+        "url": "cms/query/GetEnumIdNameList?enumType=PerformanceDocumentStatusEnum",
+        "headers": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ]
+      },
+      "valueProperty": "Id",
+      "idPath": "Id",
+      "template": "<span>{{ item.Name }}</span>",
+      "selectThreshold": 0.3,
+      "showInBusinessLogic": false,
+      "disableForeignKey": false,
+      "dontCreateTableColumn": false,
+      "validate": {
+        "onlyAvailableItems": false
+      },
+      "key": "ENUM",
+      "type": "select",
+      "indexeddb": {
+        "filter": {}
+      },
+      "allTable": "public.enum",
+      "mapId": "Id",
+      "mapValue": "Name",
+      "input": true,
+      "isDependantComponent": false,
+      "disableLimit": false,
+      "columnMetadataId": "3bf83f5a-8afc-480c-a18f-a4bce7f5c231"
+    },
+    {
+      "label": "Table",
+      "widget": "choicesjs",
+      "tableView": true,
+      "loadTable": "TABLE",
+      "dataSrc": "url",
+      "data": {
+        "values": [
+          {
+            "label": "",
+            "value": ""
+          }
+        ],
+        "url": "cms/query/TableData?tableName=public.User",
+        "headers": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ]
+      },
+      "valueProperty": "Id",
+      "idPath": "Id",
+      "template": "<span>{{ item.Name }}</span>",
+      "selectThreshold": 0.3,
+      "showInBusinessLogic": false,
+      "disableForeignKey": false,
+      "dontCreateTableColumn": false,
+      "validate": {
+        "onlyAvailableItems": false
+      },
+      "key": "Table",
+      "type": "select",
+      "indexeddb": {
+        "filter": {}
+      },
+      "allTable": "public.User",
+      "mapId": "Id",
+      "mapValue": "Name",
+      "input": true,
+      "isDependantComponent": false,
+      "disableLimit": false,
+      "columnMetadataId": "49cf3078-328c-4e12-825b-3187e821f5b1"
+    },
+    {
+      "label": "Custom",
+      "widget": "choicesjs",
+      "tableView": true,
+      "loadTable": "CUSTOM",
+      "dataSrc": "url",
+      "data": {
+        "values": [
+          {
+            "label": "",
+            "value": ""
+          }
+        ],
+        "url": "cms/query/TableIdNameList",
+        "headers": [
+          {
+            "key": "",
+            "value": ""
+          }
+        ]
+      },
+      "valueProperty": "Id",
+      "idPath": "Id",
+      "template": "<span>{{ item.Name }}</span>",
+      "selectThreshold": 0.3,
+      "showInBusinessLogic": false,
+      "disableForeignKey": false,
+      "dontCreateTableColumn": false,
+      "validate": {
+        "onlyAvailableItems": false
+      },
+      "key": "Custom",
+      "type": "select",
+      "indexeddb": {
+        "filter": {}
+      },
+      "input": true,
+      "isDependantComponent": false,
+      "disableLimit": false,
+      "columnMetadataId": "6d2fecc1-32b7-4c7a-b40b-ecacdf6a038a"
+    },
+    {
+      "label": "Message",
+      "showInBusinessLogic": false,
+      "dontCreateTableColumn": false,
+      "autoExpand": false,
+      "tableView": true,
+      "key": "Message",
+      "type": "textarea",
+      "enableLocalization": false,
+      "enableLanguageValidation": false,
+      "input": true,
+      "columnMetadataId": "1edb348f-1615-4c23-acea-136e82bd5e5e"
+    },
+    {
+      "label": "Accept terms and conditions",
+      "description": "You agree to our Terms of Service and Privacy Policy.",
+      "tableView": false,
+      "defaultValue": false,
+      "showInBusinessLogic": false,
+      "dontCreateTableColumn": false,
+      "validate": {
+        "required": true
+      },
+      "key": "terms",
+      "type": "checkbox",
+      "input": true,
+      "columnMetadataId": "2cd4a472-df62-4553-8d93-8a6d5e94ad57"
+    }
+  ]
+}

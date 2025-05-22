@@ -1,0 +1,38 @@
+{
+  "title": "/",
+  "type": "folder",
+  "content": [
+    {
+      "title": "File1.txt",
+      "type": "file"
+    },
+    {
+        "title": "File4.txt",
+        "type": "file"
+    },
+    {
+        "title": "File5.txt",
+        "type": "file"
+    },
+    {
+      "title": "Folder1",
+      "type": "folder",
+      "content": [
+        {
+          "title": "File2.txt",
+          "type": "file"
+        },
+        {
+          "title": "Folder2",
+          "type": "folder",
+          "content": [
+            {
+              "title": "File3.txt",
+              "type": "file"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
