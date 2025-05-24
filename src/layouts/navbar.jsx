@@ -57,21 +57,12 @@ const Navbar = ({setTheme}) => {
       }, [user]);
 
     return (
-        <div className="sticky top-0 w-full z-20 bg-white border-b dark:border-gray-700 dark:bg-secondary-950 dark:text-gray-200 transition-colors duration-500 ease-out">
+        <div className="w-full z-20 py-5 dark:text-gray-200 transition-colors duration-500 ease-out">
             <div className={"px-2 md:px-7 h-20 flex items-center justify-between"}>
-                <div className="relative none w-80 mr-5">
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-200 mt-0.5" aria-hidden="true"
-                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor"
-                                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
-                        {/*<FontAwesomeIcon className="w-4 h-4 text-gray-500" icon={faMagnifyingGlass}/>*/}
-                    </div>
-                    <input type="search" id="default-search" onClick={handleSearchRedirect}
-                           className="block w-full p-4 ps-10 bg-[#f4f6fa] dark:bg-gray-700 dark:bg-opacity-35 dark:text-white text-gray-900 rounded-xl h-10"
-                           placeholder="Search" required/>
-                </div>
+            <div>
+              <Text className="text-3xl font-bold tracking-tight">Home</Text>
+              <Text className="text-muted-foreground">Welcome back to your dashboard</Text>
+            </div>
                 <button
                     data-collapse-toggle="navbar-solid-bg"
                     type="button"
@@ -91,7 +82,6 @@ const Navbar = ({setTheme}) => {
                         icon={'fa-regular fa-bell'}/></Link>
                     <ThemeToggle setGlobalTheme={setTheme}/>
 
-                    <div className={'border-r dark:border-gray-700 h-10'}></div>
                         <Dropdown source={[
                                         {id: "profile", name: "My Profile", icon: "fa-user", onClick:() => router.push("/login/profile")},
                                         {id: "Grantaccess", name: "Grant Access", icon: "fa-check-double"},

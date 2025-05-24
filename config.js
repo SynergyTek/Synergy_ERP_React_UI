@@ -1,7 +1,7 @@
 const colors = require("tailwindcss/colors");
-const primary = colors.indigo,
+const primary = colors.blue,
 	secondary = colors.gray,
-	info = colors.blue,
+	info = colors.indigo,
 	danger = colors.red,
 	success = colors.green
 

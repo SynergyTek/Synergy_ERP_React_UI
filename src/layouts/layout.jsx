@@ -31,9 +31,9 @@ export default function RootLayout({ children }) {
     return (
         <>
             {(user || router.pathname === '/login')  ?
-            <div className={'flex'}>
+            <div className={'flex bg-background-light  bg-gray-50 dark:bg-secondary-900/50'}>
                 <Head>
-                    <title>Document Management System</title>
+                    <title>HRMS | Synergy</title>
                 </Head>
                 {sidebar && (
                         <Sidebar/>

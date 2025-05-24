@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Text from '~/core/text';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "~/ui/card";
 import { Button } from "~/ui/button";
 import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -58,6 +59,7 @@ const getGreeting = () => {
 export default function DashboardPage() {
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
+  const [weeks, setWeeks] = useState(['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']);
   const [greeting, setGreeting] = useState(getGreeting());
   const { setSidebar } = useSidebar();
 
@@ -69,7 +71,7 @@ export default function DashboardPage() {
     const updateDateTime = () => {
       const now = new Date();
       setCurrentTime(now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-      setCurrentDate('07 April 2025');
+      setCurrentDate(now.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }));
       setGreeting(getGreeting());
     };
     updateDateTime();
@@ -78,12 +80,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen px-4 py-6 md:px-8 md:py-10 bg-gray-50 space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Home</h1>
-        <p className="text-muted-foreground">Welcome back to your dashboard</p>
-      </div>
-
+    <div className="min-h-screen px-4 md:px-8 md:py-10 space-y-8">
       {/* Top Banner */}
       <Card className="overflow-hidden rounded-2xl shadow-sm">
         <div className="relative h-40">
@@ -110,7 +107,7 @@ export default function DashboardPage() {
             <CardTitle className="text-4xl font-bold text-blue-600">{currentTime}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-gray-500">Monday | 10AM - 7PM</p>
+            <p className="text-sm text-gray-500">{weeks[new Date().getDay()]} | 10AM - 7PM</p>
           </CardContent>
           <CardFooter>
             <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">Sign In</Button>
@@ -166,8 +163,8 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             {quickAccessLinks.map((item) => (
-              <Link key={item.name} href={item.href} className="flex justify-between items-center p-2 -mx-2 rounded-md hover:bg-gray-100">
-                <span className="text-sm text-gray-700">{item.name}</span>
+              <Link key={item.name} href={item.href} className="flex justify-between items-center p-2 -mx-2 rounded-md hover:bg-gray-100 hover:dark:bg-gray-800">
+                <Text className="text-sm text-gray-700">{item.name}</Text>
                 <ChevronRight className="h-4 w-4 text-blue-600" />
               </Link>
             ))}
@@ -215,16 +212,16 @@ export default function DashboardPage() {
           
             <div className="w-full space-y-2 text-sm">
               <div className="flex justify-between text-gray-600">
-                <span>Gross Pay</span>
-                <span className="font-mono">₹ ****</span>
+                <Text>Gross Pay</Text>
+                <Text className="font-mono">₹ ****</Text>
               </div>
               <div className="flex justify-between text-gray-600">
-                <span>Deduction</span>
-                <span className="font-mono">₹ ****</span>
+                <Text>Deduction</Text>
+                <Text className="font-mono">₹ ****</Text>
               </div>
               <div className="flex justify-between font-semibold text-gray-800">
-                <span>Net Pay</span>
-                <span className="font-mono">₹ ****</span>
+                <Text>Net Pay</Text>
+                <Text className="font-mono">₹ ****</Text>
               </div>
             </div>
           </CardContent>
@@ -243,10 +240,10 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             {upcomingHolidays.map((holiday) => (
-              <div key={holiday.name} className="flex justify-between items-center p-2 -mx-2 hover:bg-gray-100 rounded-md">
+              <div key={holiday.name} className="flex justify-between items-center p-2 -mx-2 hover:bg-gray-100 hover:dark:bg-gray-800 rounded-md">
                 <div>
-                  <p className="text-xs text-gray-500">{holiday.date}</p>
-                  <p className="text-sm font-medium text-gray-700">{holiday.day}</p>
+                  <Text className="text-xs text-gray-500">{holiday.date}</Text>
+                  <Text className="text-sm font-medium text-gray-700">{holiday.day}</Text>
                 </div>
                 <Link href={holiday.link} className="text-sm text-blue-600 font-medium hover:underline">
                   {holiday.name}
@@ -266,17 +263,17 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             {eventsAndMeetings.map((event, index) => (
-              <div key={index} className="flex gap-3 items-start p-2 -mx-2 hover:bg-gray-100 rounded-md">
+              <div key={index} className="flex gap-3 items-start p-2 -mx-2 hover:bg-gray-100 hover:dark:bg-gray-800 rounded-md">
                 <div className="bg-blue-50 p-1.5 rounded-md mt-1">
                   <event.icon className="h-4 w-4 text-blue-600" />
                 </div>
                 <div className="flex-grow">
-                  <p className="text-sm font-semibold text-gray-800">{event.title}</p>
-                  <p className="text-xs text-gray-500">{event.subtitle}</p>
+                  <Text className="text-sm font-semibold text-gray-800">{event.title}</Text>
+                  <Text className="text-xs text-gray-500">{event.subtitle}</Text>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-800">{event.time}</p>
-                  <p className="text-xs text-gray-500">{event.date}</p>
+                  <Text className="text-sm font-medium text-gray-800">{event.time}</Text>
+                  <Text className="text-xs text-gray-500">{event.date}</Text>
                 </div>
               </div>
             ))}
