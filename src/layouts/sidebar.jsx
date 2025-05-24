@@ -100,12 +100,12 @@ const Sidebar = () => {
 
 	const theme = {
 		lightText: 'text-secondary-700 dark:text-secondary-200',
-		lightActiveText: 'text-primary-800 dark:text-primary-50',
+		lightActiveText: 'text-primary-800 dark:text-primary-500',
 		lightBg: '',
-		lightActiveBg: 'bg-primary-100 dark:bg-secondary-800/75',
+		lightActiveBg: 'bg-primary-100 dark:bg-secondary-800/50',
 		lightMenuText: 'text-primary-dark',
 		activeHover: 'hover:bg-primary-100',
-		hoverLightActiveBg: 'hover:bg-primary-100 hover:dark:bg-secondary-800/75 hover:text-primary-dark',
+		hoverLightActiveBg: 'hover:bg-primary-100 hover:dark:bg-secondary-800/50 hover:text-primary-dark',
 	}
 
 	return (
@@ -113,7 +113,7 @@ const Sidebar = () => {
 			<div className="relative min-w-full overflow-hidden h-full shadow-sm flex flex-col">
 
 				{/* Header */}
-				<div className="px-4 py-9 flex items-center gap-3 border-secondary-200 dark:border-secondary-700 shrink-0">
+				<div className="px-4 py-11 flex items-center gap-3 border-secondary-200 dark:border-secondary-700 shrink-0">
 					<div className="bg-primary-600 px-[10px] rounded py-1">
 						<FontAwesomeIcon icon="fa-solid fa-chart-simple" className="text-white" />
 					</div>
@@ -121,10 +121,10 @@ const Sidebar = () => {
 				</div>
 
 				{/* Scrollable Main Navigation */}
-				<div className="overflow-y-auto flex-1 scrollbar-width-none"
+				<div className="overflow-y-auto scrollbar-width-none"
 					 style={sidebarScrollStyles}>
 					<div>
-						<ul className="space-y-1 mt-2">
+						<ul className="">
 							{menuSections.map((section) => (
 								<li key={section.name}>
 									<Link

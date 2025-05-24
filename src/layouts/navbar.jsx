@@ -59,7 +59,7 @@ const Navbar = ({setTheme}) => {
     return (
         <div className="w-full z-20 py-5 dark:text-gray-200 transition-colors duration-500 ease-out">
             <div className={"px-2 md:px-7 h-20 flex items-center justify-between"}>
-            <div>
+            <div className="grid gap-3 mt-7">
               <Text className="text-3xl font-bold tracking-tight">Home</Text>
               <Text className="text-muted-foreground">Welcome back to your dashboard</Text>
             </div>
@@ -91,7 +91,7 @@ const Navbar = ({setTheme}) => {
                                             onSelect={handledropdown}
                                     >
                     <button type="button"
-                            className="flex  items-center gap-3 text-sm  md:me-0  "
+                            className="flex items-center gap-3 text-sm md:me-0"
                             id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                             data-dropdown-placement="bottom">
                         <span className="sr-only">Open user menu</span>
