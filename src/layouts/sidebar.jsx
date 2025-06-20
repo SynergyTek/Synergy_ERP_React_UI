@@ -14,17 +14,23 @@ import {
 	faQuestionCircle as faQuestionCircleRegular,
 	faSignOutAlt,
 	faListCheck as faListCheckRegular,
-	faHome as faHomeSolid
+	faHome as faHomeSolid,
+	faMagic
 } from '@awesome.me/kit-9b926a9ec0/icons/classic/regular';
 
 import{useUser } from "@/components/UserContext"
-import {dmsApi} from "@/../client";
+import {dmsApi} from "api";
 
 const Sidebar = () => {
 	const router = useRouter();
 	const currentRoute = router.pathname;
 
 	const menuSections = [
+		{
+			name: "AI",
+			icon: faMagic,
+			path: "/chat",
+		},
 		{
 			name: "Home",
 			icon: faHomeSolid,

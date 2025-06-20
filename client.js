@@ -1,16 +1,12 @@
 import axios from "axios";
 
 let dmsApi = axios.create({
-    baseURL: 'https://demodms.aitalkx.com/webapi/',
-    headers: {
-        "Content-Type": "application/json",
-    }
+  baseURL: "https://demodms.aitalkx.com/webapi/",
+  //baseURL: "https://100.78.102.25:5001/",
+  //baseURL: 'https://localhost:44325/',
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-})
-let chatApi = axios.create({
-    baseURL: 'https://bot.aitalkx.com/webhooks/rest/webhook',
-    headers: {
-        "Content-Type": "application/json",
-    }
-})
-export {dmsApi, chatApi}
+export { dmsApi };

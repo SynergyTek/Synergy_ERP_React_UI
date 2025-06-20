@@ -60,8 +60,8 @@ const Navbar = ({setTheme}) => {
         <div className="w-full z-20 py-5 dark:text-gray-200 transition-colors duration-500 ease-out">
             <div className={"px-2 md:px-7 h-20 flex items-center justify-between"}>
             <div className="grid gap-3 mt-7">
-              <Text className="text-3xl font-bold tracking-tight">Home</Text>
-              <Text className="text-muted-foreground">Welcome back to your dashboard</Text>
+              <Text className="text-3xl font-bold tracking-tight hidden">Home</Text>
+              <Text className="text-muted-foreground hidden">Welcome back to your dashboard</Text>
             </div>
                 <button
                     data-collapse-toggle="navbar-solid-bg"
