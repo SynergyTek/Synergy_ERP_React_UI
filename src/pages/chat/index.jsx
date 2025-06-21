@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useRef, useState } from "react";
-import { dmsApi } from "api";
+// import { dmsApi } from "api"; // We will use fetch directly
 import { ChatBubble, ChatInput } from "~/chat";
 import { ChatSidebar } from "@/components/chat";
 import { Button } from "~";
@@ -26,11 +26,23 @@ function Index() {
   const [sessionId, setSessionId] = useState(null);
   const [chatTitle, setChatTitle] = useState(null);
 
-  useEffect(() => {
-    dmsApi.get(`/dms/chatbox/GetHistory?userId=${user.Id}`).then((response) => {
-      setHistory(response.data);
-    });
-  }, []);
+  const API_BASE_URL = "https://localhost:7039";
+
+  // useEffect(() => {
+  //   if (user.Id) {
+  //       fetch(`${API_BASE_URL}/dms/chatbox/GetHistory?userId=${user.Id}`)
+  //         .then(res => {
+  //             if (!res.ok) {
+  //                 throw new Error(`HTTP error! status: ${res.status}`);
+  //             }
+  //             return res.json();
+  //         })
+  //         .then(data => {
+  //           setHistory(data);
+  //         }).catch(error => console.error("Failed to fetch history:", error));
+  //   }
+  // }, [user.Id]);
+
   useEffect(() => {
     if (inputRef.current) {
       setTimeout(() => {
@@ -43,59 +55,128 @@ function Index() {
     }
   }, [messages]);
 
-  const getResponse = async (query) => {
-    let id = sessionId;
-    if (sessionId === null) {
-      let newTitle = "Conversation " + (history.length + 1);
-      setChatTitle(newTitle);
-      id = await startNewChat(newTitle);
-    }
-    try {
-      const response = await dmsApi.get("/dms/chatbox/GetResponse", {
-        params: {
-          query,
-          sessionId: sessionId ?? id,
-          userId: user.Id,
-        },
-      });
-      if (response.data.length) {
-        let responseMode = response.data[response.data.length - 1].custom?.mode;
-        if (responseMode) {
-          handleMode(responseMode);
-        }
-      }
-      return response.data.map((message) => {
-        if (message.custom && message.custom.buttons) {
-          message.custom.action = "SELECT";
-        }
-        return {
-          role: "bot",
-          content: message.text ?? message.custom,
-        };
-      });
-    } catch (error) {
-      console.error("Error", error);
-    }
-  };
+  // const getResponse = async (query) => {
+  //   let id = sessionId;
+  //   if (sessionId === null) {
+  //     let newTitle = "Conversation " + (history.length + 1);
+  //     setChatTitle(newTitle);
+  //     id = await startNewChat(newTitle);
+  //   }
+  //   try {
+  //     const url = `${API_BASE_URL}/dms/chatbox/GetResponse?` + new URLSearchParams({
+  //         query,
+  //         sessionId: id,
+  //         userId: user.Id,
+  //     });
 
-  const startNewChat = async (title) => {
-    let response = await dmsApi.get("/dms/chatbox/NewConversation", {
-      params: {
-        name: title,
-        userId: user.Id,
-      },
+  //     const response = await fetch(url);
+  //      if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     debugger
+  //     if (data.length) {
+  //       let responseMode = data[data.length - 1].custom?.mode;
+  //       if (responseMode) {
+  //         handleMode(responseMode);
+  //       }
+  //     }
+  //     return data.map((message) => {
+  //       debugger
+  //       if (message.custom && message.custom.buttons) {
+  //         message.custom.action = "SELECT";
+  //       }
+  //       return {
+  //         role: "bot",
+  //         content: message.text ?? message.custom,
+  //       };
+  //     });
+  //   } 
+  //   catch (error) {
+  //     console.error("Error fetching response:", error);
+  //     return [{ role: 'bot', content: 'Sorry, I encountered an error.' }];
+  //   }
+  // };
+
+const getResponse = async (query) => {
+  let id = sessionId;
+
+  if (sessionId === null) {
+    let newTitle = "Conversation " + (history.length + 1);
+    setChatTitle(newTitle);
+    id = await startNewChat(newTitle);
+  }
+
+  try {
+    const url = `${API_BASE_URL}/dms/chatbox/GetResponse?` + new URLSearchParams({
+      query,
+      sessionId: id,
+      userId: user.Id,
     });
 
-    setSessionId(response.data.id);
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const rawText = await response.text();
+    console.log("Raw response from backend:", rawText);
+
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (parseError) {
+      console.error("Failed to parse JSON from backend:", parseError);
+      return [{ role: 'bot', content: 'Invalid response format from server.' }];
+    }
+
+
+    const messages = Array.isArray(data) ? data : [data];
+
+    if (messages.length) {
+      let responseMode = messages[messages.length - 1].custom?.mode;
+      if (responseMode) {
+        handleMode(responseMode);
+      }
+    }
+
+    return messages.map((message) => {
+      if (message.custom && message.custom.buttons) {
+        message.custom.action = "SELECT";
+      }
+
+      return {
+        role: "bot",
+        content: message.text ?? message.custom ?? "No response text.",
+      };
+    });
+
+  } catch (error) {
+    console.error("Error fetching response:", error);
+    return [{ role: 'bot', content: 'Sorry, I encountered an error.' }];
+  }
+};
+
+
+  const startNewChat = async (title) => {
+    const url = `${API_BASE_URL}/dms/chatbox/NewConversation?` + new URLSearchParams({
+        name: title,
+        userId: user.Id,
+    });
+    let response = await fetch(url);
+    let data = await response.json();
+
+    setSessionId(data.id);
     setHistory((prevHistory) => [
       {
-        Id: response.data.id,
+        Id: data.id,
         HistoryName: title,
         CreatedDate: new Date().toISOString(),
       },
       ...prevHistory,
     ]);
-    return response.data.id;
+    return data.id;
   };
   const sendMessage = async (message) => {
     setloading(true);
@@ -109,7 +190,7 @@ function Index() {
     };
     setMessages([
       ...messages,
-      newMessage, // { role: 'bot', content: [{ text: 'Thinking...' }] },
+      newMessage,
     ]);
 
     let userInput;
@@ -134,7 +215,9 @@ function Index() {
     }
     let response = await getResponse(userInput);
     setloading(false);
-    setMessages([...messages, newMessage, ...response]);
+    if(response) {
+      setMessages([...messages, newMessage, ...response]);
+    }
   };
 
   return (
@@ -178,9 +261,12 @@ function Index() {
                       content={message.content}
                       onSelect={async (payload) => {
                         handlePayload(payload);
+                        const newMessage = { role: 'user', content: [{ text: "Selected: " + payload }]};
+                        setMessages([...messages, newMessage]);
                         let response = await getResponse(payload);
-
-                        setMessages([...messages, ...response]);
+                        if(response) {
+                          setMessages([...messages, newMessage, ...response]);
+                        }
                       }}
                       onUpload={async (file) => await handleFileUpload(file)}
                       enabled={index === messages.length - 1}
@@ -205,110 +291,54 @@ function Index() {
         setIsSidebarOpen={setIsSidebarOpen}
         history={history}
         onDeleteChat={(id) => {
-          dmsApi
-            .get("/dms/chatbox/DeleteHistory", {
-              params: {
-                sessionId: id,
-              },
-            })
-            .then(() => {
-              let newHistory = history.filter((item) => item.Id !== id);
-              setHistory(newHistory);
-            });
+           const url = `${API_BASE_URL}/dms/chatbox/DeleteHistory?` + new URLSearchParams({ sessionId: id });
+           fetch(url, { method: 'GET' }) // Assuming DELETE is GET for simplicity as in controller
+            .then(res => {
+                if(!res.ok) throw new Error("Failed to delete");
+                let newHistory = history.filter((item) => item.Id !== id);
+                setHistory(newHistory);
+                setMessages([]);
+                setSessionId(null);
+                setChatTitle(null);
+            }).catch(console.error);
         }}
         onNewChat={() => {
           setMessages([]);
           setSessionId(null);
+          setChatTitle(null);
         }}
-        onSelect={(history) => {
-          dmsApi
-            .get("/dms/chatbox/GetChatMessages", {
-              params: {
-                sessionId: history.Id,
-              },
-            })
-            .then((response) => {
-              console.log(response);
+        onSelect={(selectedHistory) => {
+          const url = `${API_BASE_URL}/dms/chatbox/GetChatMessages?` + new URLSearchParams({ sessionId: selectedHistory.Id });
+          fetch(url)
+            .then(res => res.json())
+            .then((data) => {
               let responses = [];
-              response.data
-                .sort(
-                  (a, b) => new Date(a.CreatedDate) - new Date(b.CreatedDate),
-                )
-                .forEach((message) => {
-                  let user = message["Response"];
-
+              data.forEach((message) => {
+                  let userOrBot = message.Response; // Changed from 'user'
                   let content = "";
 
-                  if (user === "user") {
-                    if (message["Message"].startsWith("/extract_entities")) {
-                      content = "Extract Entities";
-                    } else if (message["Message"] === "/search_document") {
-                      content = "Search Document";
-                    } else if (message["Message"] === "/show_menu") {
-                      content = "Show Menu";
-                    } else if (message["Message"] === "/upload_document") {
-                      content = "Upload Document";
-                    } else if (message["Message"] === "/request_summary") {
-                      content = "Summarize Document ";
-                    } else if (message["Message"] === "/qa_document") {
-                      content = "Q&A ";
-                    } else if (message["Message"] === "/exit_task") {
-                      content = "Exit Q&A";
-                    } else if (
-                      message["Message"].startsWith("/search_info_action")
-                    ) {
-                      let jsonPart = message["Message"].replace(
-                        "/search_info_action",
-                        "",
-                      );
-                      try {
-                        let parsed = JSON.parse(jsonPart);
-                        content = parsed.query_term;
-                      } catch (err) {
-                        console.error("Invalid JSON format");
+                  if (userOrBot === "user") {
+                      // This logic parses specific command-like messages from the user
+                      if (message.Message.startsWith("/extract_entities")) {
+                          content = "Extract Entities";
+                      } else if (message.Message.startsWith("/search_info_action")) {
+                          let jsonPart = message.Message.replace("/search_info_action", "");
+                          try {
+                              let parsed = JSON.parse(jsonPart);
+                              content = parsed.query_term;
+                          } catch (err) { content = "Search"; }
+                      } else {
+                          content = message.Message;
                       }
-                    } else if (
-                      message["Message"].startsWith("/ask_question_doc")
-                    ) {
-                      let jsonPart = message["Message"].replace(
-                        "/ask_question_doc",
-                        "",
-                      );
-                      try {
-                        let parsed = JSON.parse(jsonPart);
-                        content = parsed.qa_term;
-                      } catch (err) {
-                        console.error("Invalid JSON format");
-                      }
-                    } else if (
-                      message["Message"].startsWith("/select_document")
-                    ) {
-                      content = null;
-                    } else if (
-                      message["Message"].startsWith("/request_summary")
-                    ) {
-                      content = "Summarize";
-                    } else if (message["Message"].startsWith("/qa_context")) {
-                      content = "Ask a Question";
-                    } else if (
-                      message["Message"].startsWith("/revision_compare")
-                    ) {
-                      content = "Compare Revisions";
-                    } else if (
-                      message["Message"].startsWith("/select_workspace")
-                    ) {
-                      content = "Select Workspace";
-                    } else {
-                      content = message["Message"];
-                    }
-                    if (content)
-                      responses.push({
-                        role: "user",
-                        content,
-                      });
-                  } else {
+                      if (content)
+                        responses.push({
+                          role: "user",
+                          content: [{text: content}],
+                        });
+                  } else { // bot messages
                     try {
-                      const parsedMessages = JSON.parse(message["Message"]);
+                      // Rasa bot messages are often a JSON string of a list of messages
+                      const parsedMessages = JSON.parse(message.Message);
                       parsedMessages.forEach((botMessage) => {
                         responses.push({
                           role: "bot",
@@ -316,22 +346,19 @@ function Index() {
                         });
                       });
                     } catch (err) {
-                      console.error(
-                        " Invalid bot message format:",
-                        message["Message"],
-                      );
+                       // If not a JSON string, treat as plain text
                       responses.push({
                         role: "bot",
-                        content: message["Message"], // fallback if not JSON
+                        content: message.Message,
                       });
                     }
                   }
                 });
 
               setMessages(responses);
-              setSessionId(history.Id);
-              setChatTitle(history["HistoryName"]);
-            });
+              setSessionId(selectedHistory.Id);
+              setChatTitle(selectedHistory.HistoryName);
+            }).catch(console.error);
         }}
       />
     </main>
@@ -359,11 +386,11 @@ function Index() {
     } else if (payload === "/exit_task") {
       setMode(modes.default);
     } else if (payload.startsWith("/select_doc_type")) {
-      let id = payload.match(/"document_type_id":\s*"([^"]+)"/)[1];
-      setTemplateId(id);
+      let idMatch = payload.match(/"document_type_id":\s*"([^"]+)"/);
+      if(idMatch) setTemplateId(idMatch[1]);
     } else if (payload.startsWith("/select_folder")) {
-      let id = payload.match(/"folder_id":\s*"([^"]+)"/)[1];
-      setParentFolderId(id);
+      let idMatch = payload.match(/"folder_id":\s*"([^"]+)"/);
+      if(idMatch) setParentFolderId(idMatch[1]);
     }
   }
 
@@ -371,32 +398,41 @@ function Index() {
     const formData = new FormData();
     formData.append("file", file);
 
-    let { data } = await dmsApi.post("/dms/query/DmsFileUpload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    // Note: These dms/query endpoints are not in your ChatboxController.cs
+    // You would need to implement them separately in your backend.
+    console.log("File upload is not yet implemented in the backend controller provided.");
 
-    let fileData = await dmsApi.get(`/dms/query/CreateDocumentOfFile`, {
-      params: {
-        userId: user.Id,
-        parentFolderId,
-        fileId: data.fileId,
-        fileName: data.filename,
-        templateId,
-      },
-    });
+    /*
+    // Example of how you might call them if they existed:
+    try {
+        let { data } = await dmsApi.post("/dms/query/DmsFileUpload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
 
-    let noteData = fileData.data["Item"];
-    let response = await getResponse(
-      "/upload_doc_complete" +
-        JSON.stringify({
-          document_id: noteData.Id,
-          document_name: noteData.NoteSubject,
-          document_no: noteData.NoteNo,
-        }),
-    );
-    setMessages([...messages, ...response]);
+        let fileData = await dmsApi.get(`/dms/query/CreateDocumentOfFile`, {
+          params: {
+            userId: user.Id,
+            parentFolderId,
+            fileId: data.fileId,
+            fileName: data.filename,
+            templateId,
+          },
+        });
+
+        let noteData = fileData.data["Item"];
+        let response = await getResponse(
+          "/upload_doc_complete" +
+            JSON.stringify({
+              document_id: noteData.Id,
+              document_name: noteData.NoteSubject,
+              document_no: noteData.NoteNo,
+            }),
+        );
+        setMessages([...messages, ...response]);
+    } catch(error) {
+        console.error("File upload failed", error);
+    }
+    */
   }
 }
 
